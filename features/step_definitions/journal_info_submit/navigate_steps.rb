@@ -3,8 +3,8 @@ Given(/^I login as an? (.*)$/) do |role|
   @app.login.load
   title = @app.login.title.to_s
   expect(title).to eq("Springer Nature")
-  #puts "URL: " + @app.login.current_url + "\n"
-  #puts "Page Title: " + @app.login.title + "\n"
+  #puts "URL: " + @app.journal_info_submit.current_url + "\n"
+  #puts "Page Title: " + @app.journal_info_submit.title + "\n"
 
   case role
     when 'user'
@@ -13,20 +13,25 @@ Given(/^I login as an? (.*)$/) do |role|
       @app.login.password_field.set "demo1"
       @app.login.login_button.click
       expect(@app.login.title.to_s).to eq("Springer Nature Rejection Tracker")
-      #puts "URL: " + @app.login.current_url + "\n"
-      #puts "URL: " + @app.login.title + "\n"
+      #puts "URL: " + @app.journal_info_submit.current_url + "\n"
+      #puts "URL: " + @app.journal_info_submit.title + "\n"
     when 'superuser'
       #puts "The current user is: " + role.to_s
       @app.login.username_field.set "special"
       @app.login.password_field.set "demo2854242"
       @app.login.login_button.click
       expect(@app.login.title.to_s).to eq("Springer Nature Rejection Tracker")
-      #puts "URL: " + @app.login.current_url + "\n"
-      #puts "URL: " + @app.login.title + "\n"
+      #puts "URL: " + @app.journal_info_submit.current_url + "\n"
+      #puts "URL: " + @app.journal_info_submit.title + "\n"
     when 'unauthorized user'
       @app.login.username_field.set "unauthorized"
       @app.login.password_field.set "password"
       @app.login.login_button.click
       expect(@app.login.title.to_s).to eq("Springer Nature")
   end
+end
+
+
+Given(/^I am on the submit journal info page$/) do
+
 end

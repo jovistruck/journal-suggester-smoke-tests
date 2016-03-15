@@ -1,3 +1,3 @@
 class HeaderSection < SitePrism::Section
-	element :headerInner, "div.nav-wrapper"
+	element :headerInner, "body > div > nav"
 end
