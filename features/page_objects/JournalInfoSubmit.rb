@@ -18,7 +18,7 @@ class JournalInfoSubmit < SitePrism::Page
   element :impact_factor_table_header, :css, ".table.table-striped>thead>tr>th:nth-child(2)"
   element :access_type_table_header, :css, ".table.table-striped>thead>tr>th:nth-child(3)"
   elements :results_table_rows, :css, ".table.table-striped>tbody>tr"
-  elements :journal_names_table_rows, :css, ".table.table-striped>tbody>tr[data-journal-name]"
+  elements :journal_names_in_results, :css, ".result-row>td>a"
 
   # Login Headers and Footers
   section :header, ::HeaderSection, "nav.white"
