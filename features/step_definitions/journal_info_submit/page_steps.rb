@@ -6,10 +6,7 @@ end
 
 And(/^I submit a manuscript with doi id (.*)$/) do |doi_id|
   populate_and_submit_manuscript_suggest_form(doi_id)
-  $app.journal_info_submit.wait_until_name_table_header_visible
-  if get_number_of_results > 9
-    $app.journal_info_submit.show_more_button.click
-  end
+  $app.journal_info_submit.wait_until_name_table_header_visible(10)
 end
 
 Then(/^the results contain (.*) items$/) do |number_of_items|
@@ -24,7 +21,7 @@ end
 And(/^I submit a manuscript$/) do
   @randomly_picked_article=$articles["manuscripts"].keys.sample
   populate_and_submit_manuscript_suggest_form(@randomly_picked_article)
-  $app.journal_info_submit.wait_until_name_table_header_visible
+  $app.journal_info_submit.wait_until_name_table_header_visible(10)
   if get_number_of_results > 9
     $app.journal_info_submit.show_more_button.click
   end
@@ -91,4 +88,8 @@ def verify_if_results_contain_journal (expected_journal_name)
     journal_names.push(journal_name.text)
   end
   expect(journal_names).to include(expected_journal_name), "expected journal name \"#{expected_journal_name}\" in results #{journal_names}"
+end
+
+And(/^I want to see more suggestions$/) do
+  $app.journal_info_submit.show_more_button.click
 end
