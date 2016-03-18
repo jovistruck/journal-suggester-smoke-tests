@@ -11,14 +11,20 @@ class JournalInfoSubmit < SitePrism::Page
   element :find_journals_button, :id, "suggest"
 
   # Journal Suggestion Results Table
+  ## Table
   element :results_table, :css, ".table"
-  element :show_more_button, :id, "show-more"
-  element :copy_to_clipboard_button, :id, "copy-button"
   element :name_table_header, :css, ".table.table-striped>thead>tr>th:nth-child(1)"
   element :impact_factor_table_header, :css, ".table.table-striped>thead>tr>th:nth-child(2)"
   element :access_type_table_header, :css, ".table.table-striped>thead>tr>th:nth-child(3)"
   elements :results_table_rows, :css, ".table.table-striped>tbody>tr"
   elements :journal_names_in_results, :css, ".result-row>td>a"
+
+  ## Show More Copy Buttons
+  element :show_more_button, :id, "show-more"
+  element :copy_to_clipboard_button, :id, "copy-button"
+
+  ## Select Check Boxes Journals
+  elements :select_checkboxes_table, :css, "#selectedJournals"
 
   # Login Headers and Footers
   section :header, ::HeaderSection, "nav.white"

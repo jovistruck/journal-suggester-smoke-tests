@@ -33,6 +33,7 @@ html_report: --format pretty --format html --out <%= reportfile%> --format junit
 
 # WORK IN PROGRESS TAG PROFILE
 wip: --tags @wip:3 --wip features
+smoke: --tags @wip:3 --wip features
 
 # DEBUG PROFILES: Must be run in conjuction with an environment profile above
 browser: IN_BROWSER=true PAUSE=1 <%= common%> features

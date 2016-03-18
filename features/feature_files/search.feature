@@ -20,6 +20,12 @@ Feature: Find Journals for the provided manuscript
     And I want to see more suggestions
     Then the results contain 21 items
 
+  @wip
+  Scenario: I am able to copy to clipboard by selecting results
+
+    When I submit a manuscript with doi id 10.1007/s12374-011-9178-3
+    And I select and copy the the results 1,5,7
+
   @wip @for_testing
   Scenario: I am able to see matching results for all the test manuscripts
 

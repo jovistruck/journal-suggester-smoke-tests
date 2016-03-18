@@ -1,9 +1,3 @@
-require 'yaml'
-
-Before do |scenario|
-  $articles=fetch_articles
-end
-
 And(/^I submit a manuscript with doi id (.*)$/) do |doi_id|
   populate_and_submit_manuscript_suggest_form(doi_id)
   $app.journal_info_submit.wait_until_name_table_header_visible(10)
@@ -15,11 +9,11 @@ Then(/^the results contain (.*) items$/) do |number_of_items|
 end
 
 Then(/^the corresponding journal for the manuscript with doi id (.*) is displayed$/) do |doi_id|
-  verify_if_results_contain_journal($articles["manuscripts"][doi_id]["journal"])
+  verify_if_results_contain_journal($articles_data["manuscripts"][doi_id]["journal"])
 end
 
 And(/^I submit a manuscript$/) do
-  @randomly_picked_article=$articles["manuscripts"].keys.sample
+  @randomly_picked_article=$articles_data["manuscripts"].keys.sample
   populate_and_submit_manuscript_suggest_form(@randomly_picked_article)
   $app.journal_info_submit.wait_until_name_table_header_visible(10)
   if get_number_of_results > 9
@@ -29,24 +23,20 @@ end
 
 Then(/^the results contain the corresponding journal for the manuscript$/) do
   validate_results_table
-  verify_if_results_contain_journal($articles["manuscripts"][@randomly_picked_article]["journal"])
+  verify_if_results_contain_journal($articles_data["manuscripts"][@randomly_picked_article]["journal"])
 end
 
 And(/^I submit and validate results for all test manuscripts$/) do
-  $articles["manuscripts"].keys.each do |manuscript_doi|
+  $articles_data["manuscripts"].keys.each do |manuscript_doi|
     populate_and_submit_manuscript_suggest_form(manuscript_doi)
     $app.journal_info_submit.wait_until_name_table_header_visible(10)
     $app.journal_info_submit.wait_until_copy_to_clipboard_button_visible(10)
     if get_number_of_results > 9
       $app.journal_info_submit.show_more_button.click
     end
-    verify_if_results_contain_journal($articles["manuscripts"][manuscript_doi]["journal"])
+    verify_if_results_contain_journal($articles_data["manuscripts"][manuscript_doi]["journal"])
     reload_page
   end
-end
-
-def fetch_articles
-  YAML.load_file(File.dirname(__FILE__) + '/../../../resources/test-data/journals/' + "articles.yml")
 end
 
 def reload_page
@@ -54,15 +44,15 @@ def reload_page
 end
 
 def populate_and_submit_manuscript_suggest_form (doi_id)
-  $app.journal_info_submit.title_field.set $articles["manuscripts"][doi_id]["title"]
-  $app.journal_info_submit.body_field.set $articles["manuscripts"][doi_id]["body"]
-  $app.journal_info_submit.keywords_field.set $articles["manuscripts"][doi_id]["keywords"]
-  $app.journal_info_submit.maximum_impact_field.set $articles["manuscripts"][doi_id]["maximum_impact_factor"]
-  unless $articles["manuscripts"][doi_id]["primary_subject"].nil?
-    $app.journal_info_submit.primary_subject_field.select $articles["manuscripts"][doi_id]["primary_subject"]
+  $app.journal_info_submit.title_field.set $articles_data["manuscripts"][doi_id]["title"]
+  $app.journal_info_submit.body_field.set $articles_data["manuscripts"][doi_id]["body"]
+  $app.journal_info_submit.keywords_field.set $articles_data["manuscripts"][doi_id]["keywords"]
+  $app.journal_info_submit.maximum_impact_field.set $articles_data["manuscripts"][doi_id]["maximum_impact_factor"]
+  unless $articles_data["manuscripts"][doi_id]["primary_subject"].nil?
+    $app.journal_info_submit.primary_subject_field.select $articles_data["manuscripts"][doi_id]["primary_subject"]
   end
-  unless $articles["manuscripts"][doi_id]["secondary_subjects"].nil?
-    $app.journal_info_submit.secondary_subjects_field.select $articles["manuscripts"][doi_id]["secondary_subjects"]
+  unless $articles_data["manuscripts"][doi_id]["secondary_subjects"].nil?
+    $app.journal_info_submit.secondary_subjects_field.select $articles_data["manuscripts"][doi_id]["secondary_subjects"]
   end
   $app.journal_info_submit.find_journals_button.click
 end
@@ -92,4 +82,11 @@ end
 
 And(/^I want to see more suggestions$/) do
   $app.journal_info_submit.show_more_button.click
+end
+
+And(/^I select and copy the the results (.*)$/) do |rows_to_select|
+
+  rows_to_select.split(",").each do |row|
+    $app.journal_info_submit.select_checkboxes_table
+  end
 end
